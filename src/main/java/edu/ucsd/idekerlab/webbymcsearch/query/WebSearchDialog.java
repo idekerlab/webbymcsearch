@@ -54,6 +54,7 @@ public class WebSearchDialog extends JPanel {
 	private JCheckBox _rememberCheckBox;
 	private JCheckBox _googleCheckBox;
 	private JCheckBox _pubmedCheckBox;
+	private JCheckBox _pubmedCentralCheckBox;
 	private JCheckBox _iQueryCheckBox;
 	private JComboBox _comboBox;
 	private HashMap<String, String> _columns;
@@ -105,23 +106,36 @@ public class WebSearchDialog extends JPanel {
 		if (this._iQueryCheckBox != null && _iQueryCheckBox.isSelected()){
 			qSet.add("http://search.ndexbio.org/?genes=");
 		}
+		if (this._pubmedCentralCheckBox != null && _pubmedCentralCheckBox.isSelected()){
+			qSet.add("https://www.ncbi.nlm.nih.gov/pmc/?term=");
+		}
 		return qSet;
 	}
 	
 	private boolean updateComboBox(HashMap<String, String> columns){
-		_lastSelectedColumn = (String)_comboBox.getSelectedItem();
-		if (_lastSelectedColumn != null){
-			LOGGER.debug("Last selected column is: " + _lastSelectedColumn);
+		String selItem = (String)_comboBox.getSelectedItem();
+		if (selItem != null){
+			_lastSelectedColumn = selItem.substring(0, selItem.indexOf("]  ")+1);
+		}
+		
+		// if remember is disabled check all the boxes which
+		// is default behavior
+		if (_rememberCheckBox.isSelected() == false){
+			_pubmedCheckBox.setSelected(true);
+			_googleCheckBox.setSelected(true);
+		    _iQueryCheckBox.setSelected(true);
+			_pubmedCentralCheckBox.setSelected(true);
 		}
 		_comboBox.removeAllItems();
 		_columns = columns;
 		for (String col : columns.keySet()){
 			_comboBox.addItem(col);
-		}
-		if (_lastSelectedColumn != null){
-			_comboBox.setSelectedItem(_lastSelectedColumn);
-		} else {
-			_lastSelectedColumn = (String)_comboBox.getSelectedItem();
+		
+			if (_rememberCheckBox.isSelected() && _lastSelectedColumn != null){
+				if (col.startsWith(_lastSelectedColumn)){
+					_comboBox.setSelectedItem(col);
+				}
+			}
 		}
 		return true;
 	}
@@ -188,8 +202,21 @@ public class WebSearchDialog extends JPanel {
 		_pubmedCheckBox.setToolTipText("Run PubMed Search");
 		queryPanel.add(_pubmedCheckBox, pubmedConstraints);	
 		
+		GridBagConstraints pubmedCentralConstraints = new GridBagConstraints();
+		pubmedCentralConstraints.gridy = 2;
+		pubmedCentralConstraints.gridx = 0;
+		pubmedCentralConstraints.anchor = GridBagConstraints.WEST;
+		pubmedCentralConstraints.fill = GridBagConstraints.NONE;
+		pubmedCentralConstraints.insets = new Insets(0, 0, 0, 0);
+		_pubmedCentralCheckBox = new JCheckBox("PubMed Central Search");
+		_pubmedCentralCheckBox.setName("pubmedCentralCheckBox");
+		_pubmedCentralCheckBox.setSelected(true);
+		_pubmedCentralCheckBox.setEnabled(true);
+		_pubmedCentralCheckBox.setToolTipText("Run PubMed Central Search");
+		queryPanel.add(_pubmedCentralCheckBox, pubmedCentralConstraints);	
+		
 		GridBagConstraints iQueryConstraints = new GridBagConstraints();
-		iQueryConstraints.gridy = 2;
+		iQueryConstraints.gridy = 3;
 		iQueryConstraints.gridx = 0;
 		iQueryConstraints.anchor = GridBagConstraints.WEST;
 		iQueryConstraints.fill = GridBagConstraints.NONE;
@@ -249,8 +276,8 @@ public class WebSearchDialog extends JPanel {
 		rememberConstraints.insets = new Insets(0, 0, 0, 0);
 		_rememberCheckBox = new JCheckBox(REMEMBER_TEXT);
 		_rememberCheckBox.setName("rememberCheckBox");
-		_rememberCheckBox.setSelected(false);
-		_rememberCheckBox.setEnabled(false);
+		_rememberCheckBox.setSelected(true);
+		_rememberCheckBox.setEnabled(true);
 		_rememberCheckBox.setToolTipText(REMEMBER_TOOLTIP);
 		rPanel.add(_rememberCheckBox, rememberConstraints);
 		GridBagConstraints rememberIcon = new GridBagConstraints();
@@ -271,7 +298,7 @@ public class WebSearchDialog extends JPanel {
 					WebSearchDialog.REMEMBER_TEXT + " checkbox", 
 					REMEMBER_MESSAGE, 20, 40);
 		iconLabel.setName("rememberIcon");
-		iconLabel.setEnabled(false);
+		iconLabel.setEnabled(true);
 		iconLabel.setToolTipText("Click here for more information about " +
 					WebSearchDialog.REMEMBER_TEXT);
 		return iconLabel;

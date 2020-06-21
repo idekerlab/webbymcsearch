@@ -66,7 +66,15 @@ public class WebSearchTaskFactoryImpl extends AbstractNodeViewTaskFactory implem
 	 */
 	private URI getQueryURI(final String searchEngineURLStr, String data){
 		try {
-			String queryString = getQueryString(data);
+			boolean replaceWhiteSpaceWithOr = false;
+			
+			// HACK FIX to add OR clause between terms in search for
+			// pubmed central and pubmed searches, but to leave google
+			// and iQuery alone
+			if (searchEngineURLStr.matches("^.*term=$")){
+				replaceWhiteSpaceWithOr = true;
+			}
+			String queryString = getQueryString(data, replaceWhiteSpaceWithOr);
 			if (queryString == null){
 				_dialogUtil.showMessageDialog(_swingApplication.getJFrame(),
 						"No terms to query");
@@ -168,12 +176,33 @@ public class WebSearchTaskFactoryImpl extends AbstractNodeViewTaskFactory implem
 	 * @param networkView
 	 * @return 
 	 */
-	private String getQueryString(String data) throws UnsupportedEncodingException {
+	private String getQueryString(final String data, boolean replaceWhiteSpaceWithOr) throws UnsupportedEncodingException {
 		
 		if (data == null || data.trim().isEmpty()){
 			return null;
 		}
-		return URLEncoder.encode(data, StandardCharsets.UTF_8.toString());
+		
+		String theQuery = data;
+		if (replaceWhiteSpaceWithOr == true){
+			theQuery = replaceWhiteSpaceWithOr(data);
+		}
+		
+		return URLEncoder.encode(theQuery, StandardCharsets.UTF_8.toString());
+	}
+	
+	private String replaceWhiteSpaceWithOr(final String data){
+		StringBuilder sb = new StringBuilder();
+		boolean emptyBuilder = true;
+		for (String dataStrFrag : data.split("\\s+")){
+			if (emptyBuilder == true){
+				sb.append(dataStrFrag);
+				emptyBuilder = false;
+				continue;
+			}
+			sb.append(" OR ");
+			sb.append(dataStrFrag);
+		}
+		return sb.toString();
 	}
 
 	@Override

@@ -13,13 +13,13 @@ public class WebQueryFactory {
 	public Set<WebQuery> getWebQueries(){
 		Set<WebQuery> wqList = new LinkedHashSet<>();
 		wqList.add(new WebQuery("google", "Google Search", "https://www.google.com/search?q=",
-		                               "Google"));
+		                               "Google", false));
 		wqList.add(new WebQuery("pubmed", "PubMed Search", "https://pubmed.ncbi.nlm.nih.gov/?term=",
-		                               "PubMed"));
+		                               "PubMed", true));
 		wqList.add(new WebQuery("pubmedcentral", "PubMed Central Search", "https://www.ncbi.nlm.nih.gov/pmc/?term=",
-		                               "PubMed Central"));
+		                               "PubMed Central", true));
 		wqList.add(new WebQuery("iquery", "iQuery Search", "http://search.ndexbio.org/?genes=",
-		                               "iQuery"));
+		                               "iQuery", false));
 		return wqList;
 	}
 }

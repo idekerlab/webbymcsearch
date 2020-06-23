@@ -51,12 +51,13 @@ public class AddQueryColumnsTask extends AbstractTask {
 				if (rawValue == null){
 					continue;
 				}
-				String qStr = _columnUtil.getQueryString(rawValue, true);
+				String qStr = _columnUtil.getQueryString(rawValue,
+						selectedQuery.isReplaceWhiteSpaceWithOr());
 				if (qStr == null){
 					continue;
 				}
 				_network.getRow(node).set(CyNetworkUtil.WEBBY_MCSEARCH_NAMESPACE,
-						newColName , "<a target=\"_blank\" href=\"" + selectedQuery.getUrlAsString() + qStr + "\">Query</a>");
+						newColName , "<a target=\"_blank\" href=\"" + selectedQuery.getUrlAsString() + qStr + "\">Run " + selectedQuery.getColumnName() + " Query via browser</a>");
 			}
 		}
 		tm.setProgress(100.0);

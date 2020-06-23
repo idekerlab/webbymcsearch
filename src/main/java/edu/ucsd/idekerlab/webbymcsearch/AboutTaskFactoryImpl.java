@@ -64,7 +64,9 @@ public class AboutTaskFactoryImpl implements NetworkTaskFactory {
     sb.append("This is accomplished by sending the queries to the default web browser.<br/><br/>");
 	sb.append("To use open a network and select a <b>single</b> node in the view, then right click to <br/>");
 	sb.append("open the context menu and select <b>Apps > Webby McSearch > Web Search</b><br/><br/>");
-
+    sb.append("<b>New Feature in 1.1.0:</b><br/>It is now possible to add new columns with html search links.<br/>");
+	sb.append("To do this, open a network and from main Cytoscape Menu bar select <br/>");
+	sb.append("<b>Apps > Webby McSearch > Add Web Search Column(s)<br/><br/>");
 	sb.append("<b>NOTE:</b> This service is experimental. The interface is subject to change.<br/><br/>");
 	sb.append("");
 	

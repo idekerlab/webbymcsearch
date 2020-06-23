@@ -67,24 +67,19 @@ public class WebSearchTaskFactoryImpl extends AbstractNodeViewTaskFactory implem
 	 * @param networkView
 	 * @return 
 	 */
-	private URI getQueryURI(CyNetwork network, CyNode selectedNode, final String  searchEngineURLStr, CyColumn column){
+	private URI getQueryURI(CyNetwork network, CyNode selectedNode, WebQuery query, CyColumn column){
 		try {
 			boolean replaceWhiteSpaceWithOr = false;
 			
 			String data = _columnUtil.getColumnData(network, column, selectedNode);
-			// HACK FIX to add OR clause between terms in search for
-			// pubmed central and pubmed searches, but to leave google
-			// and iQuery alone
-			if (searchEngineURLStr.matches("^.*term=$")){
-				replaceWhiteSpaceWithOr = true;
-			}
-			String queryString = _columnUtil.getQueryString(data, replaceWhiteSpaceWithOr);
+			
+			String queryString = _columnUtil.getQueryString(data, query.isReplaceWhiteSpaceWithOr());
 			if (queryString == null){
 				_dialogUtil.showMessageDialog(_swingApplication.getJFrame(),
 						"No terms to query");
 				return null;
 			}
-			return new URI(searchEngineURLStr + queryString);
+			return new URI(query.getUrlAsString() + queryString);
 		} catch(UnsupportedEncodingException | URISyntaxException e){
 			LOGGER.error("Unable to build query URL", e);
 			_dialogUtil.showMessageDialog(_swingApplication.getJFrame(),
@@ -152,7 +147,7 @@ public class WebSearchTaskFactoryImpl extends AbstractNodeViewTaskFactory implem
 		
 		for (WebQuery query : _webSearchDialog.getSelectedQueries()){
 			URI queryURI = getQueryURI(network, selectedNode, 
-					query.getUrlAsString(), _webSearchDialog.getSelectedColumn());
+					query, _webSearchDialog.getSelectedColumn());
 			if (queryURI == null){
 				continue;
 			}

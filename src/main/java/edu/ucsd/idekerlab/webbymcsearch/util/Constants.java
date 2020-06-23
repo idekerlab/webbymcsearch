@@ -19,6 +19,7 @@ public class Constants {
 	public final static String CLOSE = "Close";
 	public final static String ABOUT = "About";
 	public final static String UPDATE = "Update";
+	public final static String ADD_COLUMN = "Add Column(s)";
 	public final static String QUERY = "Query";
 	public final static String RESET = "Reset to defaults";
 }

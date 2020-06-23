@@ -6,6 +6,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -13,6 +14,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import org.cytoscape.model.CyColumn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,27 +53,29 @@ public class WebSearchDialog extends JPanel {
 	      
 	
 	private boolean _guiLoaded;
+	private HashMap<JCheckBox, WebQuery> _checkBoxes;
 	private JCheckBox _rememberCheckBox;
-	private JCheckBox _googleCheckBox;
-	private JCheckBox _pubmedCheckBox;
-	private JCheckBox _pubmedCentralCheckBox;
-	private JCheckBox _iQueryCheckBox;
+	
 	private JComboBox _comboBox;
-	private HashMap<String, String> _columns;
+	private HashMap<String, CyColumn> _columns;
 	private IconJLabelDialogFactory _iconFactory;
 	private String _lastSelectedColumn;
+	private Set<WebQuery> _queries;
 	
-	public WebSearchDialog(IconJLabelDialogFactory iconFactory){
+	public WebSearchDialog(IconJLabelDialogFactory iconFactory,
+			Set<WebQuery> queries){
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		_iconFactory = iconFactory;
 		_guiLoaded = false;
+		_queries = queries;
+		_checkBoxes = new LinkedHashMap<>();
 	}
 	
 	/**
 	* Creates the GUI
 	* @return true upon success otherwise false
 	*/
-    public boolean createGUI(HashMap<String, String> columns) {
+    public boolean createGUI(HashMap<String, CyColumn> columns) {
 		if (_guiLoaded == false){
 			this.add(getPanel());
 			_guiLoaded = true;
@@ -79,9 +83,9 @@ public class WebSearchDialog extends JPanel {
 		return updateComboBox(columns);
     }
 	
-	public String getSelectedColumn(){
+	public CyColumn getSelectedColumn(){
 		
-		return _columns.get((String)_comboBox.getSelectedItem());
+		return _columns.get(_comboBox.getSelectedItem());
 	}
 	
 	/**
@@ -95,24 +99,17 @@ public class WebSearchDialog extends JPanel {
 		return _rememberCheckBox.isSelected();
 	}
 	
-	public Set<String> getSelectedQueries(){
-		Set<String> qSet = new HashSet<>();
-		if (_pubmedCheckBox != null && _pubmedCheckBox.isSelected()){
-			qSet.add("https://pubmed.ncbi.nlm.nih.gov/?term=");
-		}
-		if (_googleCheckBox != null && _googleCheckBox.isSelected()){
-			qSet.add("https://www.google.com/search?q=");
-		}
-		if (this._iQueryCheckBox != null && _iQueryCheckBox.isSelected()){
-			qSet.add("http://search.ndexbio.org/?genes=");
-		}
-		if (this._pubmedCentralCheckBox != null && _pubmedCentralCheckBox.isSelected()){
-			qSet.add("https://www.ncbi.nlm.nih.gov/pmc/?term=");
+	public Set<WebQuery> getSelectedQueries(){
+		Set<WebQuery> qSet = new HashSet<>();
+		for (JCheckBox checkBox : this._checkBoxes.keySet()){
+			if (checkBox.isSelected()){
+				qSet.add(_checkBoxes.get(checkBox));
+			}
 		}
 		return qSet;
 	}
 	
-	private boolean updateComboBox(HashMap<String, String> columns){
+	private boolean updateComboBox(HashMap<String, CyColumn> columns){
 		String selItem = (String)_comboBox.getSelectedItem();
 		if (selItem != null){
 			_lastSelectedColumn = selItem.substring(0, selItem.indexOf("]  ")+1);
@@ -121,10 +118,9 @@ public class WebSearchDialog extends JPanel {
 		// if remember is disabled check all the boxes which
 		// is default behavior
 		if (_rememberCheckBox.isSelected() == false){
-			_pubmedCheckBox.setSelected(true);
-			_googleCheckBox.setSelected(true);
-		    _iQueryCheckBox.setSelected(true);
-			_pubmedCentralCheckBox.setSelected(true);
+			for (JCheckBox checkBox : this._checkBoxes.keySet()){
+				checkBox.setSelected(true);
+			}
 		}
 		_comboBox.removeAllItems();
 		_columns = columns;
@@ -176,58 +172,23 @@ public class WebSearchDialog extends JPanel {
 					BorderFactory.createTitledBorder("Web Query"),
 					BorderFactory.createEmptyBorder(5,5,5,5)));
 		
-		GridBagConstraints googleConstraints = new GridBagConstraints();
-		googleConstraints.gridy = 0;
-		googleConstraints.gridx = 0;
-		googleConstraints.anchor = GridBagConstraints.WEST;
-		googleConstraints.fill = GridBagConstraints.NONE;
-		googleConstraints.insets = new Insets(0, 0, 0, 0);
-		_googleCheckBox = new JCheckBox("Google Search");
-		_googleCheckBox.setName("googleCheckBox");
-		_googleCheckBox.setSelected(true);
-		_googleCheckBox.setEnabled(true);
-		_googleCheckBox.setToolTipText("Run Google Search");
-		queryPanel.add(_googleCheckBox, googleConstraints);
-
-		GridBagConstraints pubmedConstraints = new GridBagConstraints();
-		pubmedConstraints.gridy = 1;
-		pubmedConstraints.gridx = 0;
-		pubmedConstraints.anchor = GridBagConstraints.WEST;
-		pubmedConstraints.fill = GridBagConstraints.NONE;
-		pubmedConstraints.insets = new Insets(0, 0, 0, 0);
-		_pubmedCheckBox = new JCheckBox("PubMed Search");
-		_pubmedCheckBox.setName("pubmedCheckBox");
-		_pubmedCheckBox.setSelected(true);
-		_pubmedCheckBox.setEnabled(true);
-		_pubmedCheckBox.setToolTipText("Run PubMed Search");
-		queryPanel.add(_pubmedCheckBox, pubmedConstraints);	
-		
-		GridBagConstraints pubmedCentralConstraints = new GridBagConstraints();
-		pubmedCentralConstraints.gridy = 2;
-		pubmedCentralConstraints.gridx = 0;
-		pubmedCentralConstraints.anchor = GridBagConstraints.WEST;
-		pubmedCentralConstraints.fill = GridBagConstraints.NONE;
-		pubmedCentralConstraints.insets = new Insets(0, 0, 0, 0);
-		_pubmedCentralCheckBox = new JCheckBox("PubMed Central Search");
-		_pubmedCentralCheckBox.setName("pubmedCentralCheckBox");
-		_pubmedCentralCheckBox.setSelected(true);
-		_pubmedCentralCheckBox.setEnabled(true);
-		_pubmedCentralCheckBox.setToolTipText("Run PubMed Central Search");
-		queryPanel.add(_pubmedCentralCheckBox, pubmedCentralConstraints);	
-		
-		GridBagConstraints iQueryConstraints = new GridBagConstraints();
-		iQueryConstraints.gridy = 3;
-		iQueryConstraints.gridx = 0;
-		iQueryConstraints.anchor = GridBagConstraints.WEST;
-		iQueryConstraints.fill = GridBagConstraints.NONE;
-		iQueryConstraints.insets = new Insets(0, 0, 0, 0);
-		_iQueryCheckBox = new JCheckBox("iQuery Search");
-		_iQueryCheckBox.setName("iQueryCheckBox");
-		_iQueryCheckBox.setSelected(true);
-		_iQueryCheckBox.setEnabled(true);
-		_iQueryCheckBox.setToolTipText("Run iQuery Search");
-		queryPanel.add(_iQueryCheckBox, iQueryConstraints);	
-
+		int yCoord = 0;
+		for (WebQuery wq : this._queries){
+			GridBagConstraints checkBoxConstraints = new GridBagConstraints();
+			checkBoxConstraints.gridy = yCoord;
+			checkBoxConstraints.gridx = 0;
+			checkBoxConstraints.anchor = GridBagConstraints.WEST;
+			checkBoxConstraints.fill = GridBagConstraints.NONE;
+			checkBoxConstraints.insets = new Insets(0, 0, 0, 0);
+			JCheckBox checkBox = new JCheckBox(wq.getGuiVisibleName());
+			checkBox.setName(wq.getName());
+			checkBox.setSelected(true);
+			checkBox.setEnabled(true);
+			checkBox.setToolTipText("Run " + wq.getGuiVisibleName());
+			_checkBoxes.put(checkBox, wq);
+			queryPanel.add(checkBox, checkBoxConstraints);
+			yCoord++;
+		}
 		return queryPanel;
 	}
 	

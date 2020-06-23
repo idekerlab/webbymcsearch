@@ -6,6 +6,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.List;
 import edu.ucsd.idekerlab.webbymcsearch.DoNothingTask;
+import edu.ucsd.idekerlab.webbymcsearch.util.ColumnUtil;
 import edu.ucsd.idekerlab.webbymcsearch.util.Constants;
 import edu.ucsd.idekerlab.webbymcsearch.util.DesktopUtil;
 import edu.ucsd.idekerlab.webbymcsearch.util.ShowDialogUtil;
@@ -44,6 +45,7 @@ public class WebSearchTaskFactoryImpl extends AbstractNodeViewTaskFactory implem
 	private final ShowDialogUtil _dialogUtil;
 	private DesktopUtil _deskTopUtil;
 	private WebSearchDialog _webSearchDialog;
+	private ColumnUtil _columnUtil;
  
 
 	public WebSearchTaskFactoryImpl(CySwingApplication swingApplication,
@@ -52,6 +54,7 @@ public class WebSearchTaskFactoryImpl extends AbstractNodeViewTaskFactory implem
 		_dialogUtil = dialogUtil;
 		_deskTopUtil = new DesktopUtil();
 		_webSearchDialog = webSearchDialog;
+		_columnUtil = new ColumnUtil();
 	}
 	
 	protected void setAlternateDesktopUtil(DesktopUtil deskTopUtil){
@@ -64,17 +67,18 @@ public class WebSearchTaskFactoryImpl extends AbstractNodeViewTaskFactory implem
 	 * @param networkView
 	 * @return 
 	 */
-	private URI getQueryURI(final String searchEngineURLStr, String data){
+	private URI getQueryURI(CyNetwork network, CyNode selectedNode, final String  searchEngineURLStr, CyColumn column){
 		try {
 			boolean replaceWhiteSpaceWithOr = false;
 			
+			String data = _columnUtil.getColumnData(network, column, selectedNode);
 			// HACK FIX to add OR clause between terms in search for
 			// pubmed central and pubmed searches, but to leave google
 			// and iQuery alone
 			if (searchEngineURLStr.matches("^.*term=$")){
 				replaceWhiteSpaceWithOr = true;
 			}
-			String queryString = getQueryString(data, replaceWhiteSpaceWithOr);
+			String queryString = _columnUtil.getQueryString(data, replaceWhiteSpaceWithOr);
 			if (queryString == null){
 				_dialogUtil.showMessageDialog(_swingApplication.getJFrame(),
 						"No terms to query");
@@ -89,17 +93,6 @@ public class WebSearchTaskFactoryImpl extends AbstractNodeViewTaskFactory implem
 		}
 	}
 	
-	private String getTruncatedColumnName(CyColumn column){
-		String rawColName = column.getName();
-		if (rawColName == null){
-			return null;
-		}
-		if (rawColName.length() <= MAX_RAW_COL_LEN){
-			return rawColName;
-		}
-		return rawColName.substring(0, MAX_RAW_COL_LEN - 3) + "...";
-	}
-	
 	private String getTruncatedColumnData(final String rawData){
 		if (rawData.length() <= MAX_RAW_DATA_LEN){
 			return rawData;
@@ -108,42 +101,10 @@ public class WebSearchTaskFactoryImpl extends AbstractNodeViewTaskFactory implem
 		
 	}
 	
-	private String getColumnData(CyNetwork network, CyColumn column, CyNode selectedNode){
-		if (column.getType() == String.class){
-			String rawValue = network.getRow(selectedNode).get(column.getName(),
-					                                           String.class);
-			if (rawValue == null || rawValue.trim().length() == 0){
-				return null;
-			}
-			return rawValue;
-		}
-		if (column.getType() == List.class){
-			List rawList = network.getRow(selectedNode).get(column.getName(),
-					                                        List.class);
-			if (rawList == null){
-				return null;
-			}
-			StringBuilder sb = new StringBuilder();
-			for (Object listItem : rawList){
-				if (listItem.getClass() != String.class){
-					return null;
-				}
-				sb.append((String)listItem);
-				sb.append(" ");
-			}
-			String res = sb.toString();
-			if (res.trim().length() == 0){
-				return null;
-			}
-			return res;
-		}
-		return null;
-	}
-	
-	private HashMap<String, String> getColumns(CyNetworkView networkView){
+	private HashMap<String, CyColumn> getColumns(CyNetworkView networkView){
 		CyNetwork network = networkView.getModel();
 		CyTable nodeTable = network.getDefaultNodeTable();
-		HashMap<String, String> columnMap = new LinkedHashMap<>();
+		HashMap<String, CyColumn> columnMap = new LinkedHashMap<>();
 		CyNode selectedNode = getSelectedNode(network);
 		for (CyColumn column : nodeTable.getColumns()) {
 			
@@ -151,13 +112,13 @@ public class WebSearchTaskFactoryImpl extends AbstractNodeViewTaskFactory implem
 				continue;
 			}
 			
-			String rawValue = getColumnData(network, column, selectedNode);
+			String rawValue = _columnUtil.getColumnData(network, column, selectedNode);
 			if (rawValue == null){
 				continue;
 			}
-	
-			columnMap.put("[" + getTruncatedColumnName(column) + "]  "
-					+ getTruncatedColumnData(rawValue), rawValue);
+			columnMap.put("[" + _columnUtil.getTruncatedColumnName(column,
+					MAX_RAW_COL_LEN) + "]  "
+					+ getTruncatedColumnData(rawValue), column);
 		}
 
 		return columnMap;
@@ -167,51 +128,11 @@ public class WebSearchTaskFactoryImpl extends AbstractNodeViewTaskFactory implem
 		List<CyNode> selectedNodes = CyTableUtil.getSelectedNodes(network);
 		return selectedNodes.get(0);
 	}
-	
-	/**
-	 * Creates term list by getting data from node column named 
-	 * TODO FIX
-	 * and replacing the default delimiter with {@literal %20} so it can be put in
-	 * a web link
-	 * @param networkView
-	 * @return 
-	 */
-	private String getQueryString(final String data, boolean replaceWhiteSpaceWithOr) throws UnsupportedEncodingException {
-		
-		if (data == null || data.trim().isEmpty()){
-			return null;
-		}
-		
-		String theQuery = data;
-		if (replaceWhiteSpaceWithOr == true){
-			theQuery = replaceWhiteSpaceWithOr(data);
-		}
-		
-		return URLEncoder.encode(theQuery, StandardCharsets.UTF_8.toString());
-	}
-	
-	private String replaceWhiteSpaceWithOr(final String data){
-		StringBuilder sb = new StringBuilder();
-		boolean emptyBuilder = true;
-		for (String dataStrFrag : data.split("\\s+")){
-			if (emptyBuilder == true){
-				sb.append(dataStrFrag);
-				emptyBuilder = false;
-				continue;
-			}
-			sb.append(" OR ");
-			sb.append(dataStrFrag);
-		}
-		return sb.toString();
-	}
 
 	@Override
 	public TaskIterator createTaskIterator(CyNetworkView networkView) {
-		HashMap<String, String> colData = this.getColumns(networkView);
-		List<String> colLabels = new ArrayList<>();
-		for (String col: colData.keySet()){
-			colLabels.add(col);
-		}
+		HashMap<String, CyColumn> colData = this.getColumns(networkView);
+		
 		_webSearchDialog.createGUI(colData);
 		Object[] options = {Constants.QUERY, Constants.CANCEL};
 		int res = _dialogUtil.showOptionDialog(_swingApplication.getJFrame(),
@@ -226,8 +147,12 @@ public class WebSearchTaskFactoryImpl extends AbstractNodeViewTaskFactory implem
 		if (res != 0){
 			return new TaskIterator(new DoNothingTask());
 		}
-		for (String searchEngineURLStr : _webSearchDialog.getSelectedQueries()){
-			URI queryURI = getQueryURI(searchEngineURLStr, _webSearchDialog.getSelectedColumn());
+		CyNetwork network = networkView.getModel();
+		CyNode selectedNode = this.getSelectedNode(network);
+		
+		for (WebQuery query : _webSearchDialog.getSelectedQueries()){
+			URI queryURI = getQueryURI(network, selectedNode, 
+					query.getUrlAsString(), _webSearchDialog.getSelectedColumn());
 			if (queryURI == null){
 				continue;
 			}

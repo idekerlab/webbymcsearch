@@ -1,5 +1,7 @@
 package edu.ucsd.idekerlab.webbymcsearch;
 
+import edu.ucsd.idekerlab.webbymcsearch.query.WebQueryFactory;
+import edu.ucsd.idekerlab.webbymcsearch.query.WebSearchAddColTaskFactoryImpl;
 import edu.ucsd.idekerlab.webbymcsearch.query.WebSearchDialog;
 import static org.cytoscape.application.swing.ActionEnableSupport.ENABLE_FOR_SELECTED_NODES;
 import static org.cytoscape.work.ServiceProperties.ENABLE_FOR;
@@ -46,6 +48,17 @@ public class CyActivator extends AbstractCyActivator {
 		IconJLabelDialogFactory iconJLabelFactory = new IconJLabelDialogFactory(dialogUtil,
 				iconHolderFactory, editorPaneFac);
 
+		WebQueryFactory wqf = new WebQueryFactory();
+		WebSearchDialog webSearchDialog = new WebSearchDialog(iconJLabelFactory,
+		wqf.getWebQueries());
+		
+		// add Add Web Search Column under Apps => Webby McSearch menu
+		Properties addColProps = new Properties();
+		addColProps.setProperty(MENU_GRAVITY, "1.0");
+		addColProps.setProperty(PREFERRED_MENU, Constants.TOP_MENU);
+		addColProps.setProperty(TITLE, "Add Web Search Column(s)");
+		registerAllServices(bc, new WebSearchAddColTaskFactoryImpl(swingApplication, dialogUtil, webSearchDialog), addColProps);
+		
 		// add About under Apps => Webby McSearch menu
 		Properties aboutProps = new Properties();
 		aboutProps.setProperty(MENU_GRAVITY, "2.0");
@@ -59,7 +72,6 @@ public class CyActivator extends AbstractCyActivator {
 		iQueryCMenuProps.setProperty(TITLE, "Web Search");
 		iQueryCMenuProps.put(IN_MENU_BAR, false);
 		iQueryCMenuProps.put(IN_CONTEXT_MENU, true);
-		WebSearchDialog webSearchDialog = new WebSearchDialog(iconJLabelFactory);
 		WebSearchTaskFactoryImpl iQueryFac = new WebSearchTaskFactoryImpl(swingApplication, dialogUtil, webSearchDialog);
 		registerAllServices(bc, iQueryFac, iQueryCMenuProps);
 		

@@ -20,6 +20,8 @@ public class WebQueryFactory {
 		                               "PubMed Central", true));
 		wqList.add(new WebQuery("iquery", "iQuery Search", "http://search.ndexbio.org/?genes=",
 		                               "iQuery", false));
+                wqList.add(new WebQuery("genecard", "GeneCards Search", "https://www.genecards.org/Search/Keyword?queryString=",
+		                               "GeneCards", false));
 		return wqList;
 	}
 }

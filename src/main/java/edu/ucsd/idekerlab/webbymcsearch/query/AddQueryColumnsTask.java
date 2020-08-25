@@ -57,7 +57,8 @@ public class AddQueryColumnsTask extends AbstractTask {
 					continue;
 				}
 				_network.getRow(node).set(CyNetworkUtil.WEBBY_MCSEARCH_NAMESPACE,
-						newColName , "<a target=\"_blank\" href=\"" + selectedQuery.getUrlAsString() + qStr + "\">Run " + selectedQuery.getColumnName() + " Query via browser</a>");
+                                                   newColName, selectedQuery.getUrlAsString() + qStr);
+						//newColName , "<a target=\"_blank\" href=\"" + selectedQuery.getUrlAsString() + qStr + "\">Run " + selectedQuery.getColumnName() + " Query via browser</a>");
 			}
 		}
 		tm.setProgress(100.0);

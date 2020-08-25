@@ -191,7 +191,7 @@ public class WebSearchTaskFactoryImpl extends AbstractNodeViewTaskFactory implem
 	public boolean isReady(CyNetworkView networkView) {
 		if (networkView != null && networkView.getModel() != null) {
                         int numSelectedNodes = CyTableUtil.getSelectedNodes(networkView.getModel()).size();
-			if (numSelectedNodes > 1 && numSelectedNodes <=5) {
+			if (numSelectedNodes > 1 && numSelectedNodes <=2) {
 				return true;
 			}
 		}

@@ -1,6 +1,5 @@
-package edu.ucsd.idekerlab.webbymcsearch2;
+package edu.ucsd.idekerlab.webbymcsearch;
 
-import edu.ucsd.idekerlab.webbymcsearch.AboutTaskFactoryImpl;
 import javax.swing.ImageIcon;
 import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;

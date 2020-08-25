@@ -1,6 +1,5 @@
-package edu.ucsd.idekerlab.webbymcsearch2;
+package edu.ucsd.idekerlab.webbymcsearch;
 
-import edu.ucsd.idekerlab.webbymcsearch.DoNothingTask;
 import org.cytoscape.work.TaskMonitor;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;

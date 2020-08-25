@@ -142,19 +142,25 @@ public class WebSearchTaskFactoryImpl extends AbstractNodeViewTaskFactory implem
 		if (res != 0){
 			return new TaskIterator(new DoNothingTask());
 		}
+                boolean openWebBrowserRes = true;
 		CyNetwork network = networkView.getModel();
-		CyNode selectedNode = this.getSelectedNode(network);
+                for (CyNode selectedNode : CyTableUtil.getSelectedNodes(network)){
 		
-		for (WebQuery query : _webSearchDialog.getSelectedQueries()){
-			URI queryURI = getQueryURI(network, selectedNode, 
-					query, _webSearchDialog.getSelectedColumn());
-			if (queryURI == null){
-				continue;
-			}
-			if (runQueryOnWebBrowser(queryURI) == false){
-				break;
-			}
-		}
+                    for (WebQuery query : _webSearchDialog.getSelectedQueries()){
+                            URI queryURI = getQueryURI(network, selectedNode, 
+                                            query, _webSearchDialog.getSelectedColumn());
+                            if (queryURI == null){
+                                    continue;
+                            }
+                            openWebBrowserRes = runQueryOnWebBrowser(queryURI);
+                            if (openWebBrowserRes == false){
+                                break;
+                            }
+                    }
+                    if (openWebBrowserRes == false){
+                        break;
+                    }
+                }
 		
 		return new TaskIterator(new DoNothingTask());
 	}
@@ -184,7 +190,8 @@ public class WebSearchTaskFactoryImpl extends AbstractNodeViewTaskFactory implem
 	@Override
 	public boolean isReady(CyNetworkView networkView) {
 		if (networkView != null && networkView.getModel() != null) {
-			if (CyTableUtil.getSelectedNodes(networkView.getModel()).size() == 1) {
+                        int numSelectedNodes = CyTableUtil.getSelectedNodes(networkView.getModel()).size();
+			if (numSelectedNodes > 1 && numSelectedNodes <=5) {
 				return true;
 			}
 		}

@@ -67,12 +67,9 @@ public class WebSearchTaskFactoryImpl extends AbstractNodeViewTaskFactory implem
 	 * @param networkView
 	 * @return 
 	 */
-	private URI getQueryURI(CyNetwork network, CyNode selectedNode, WebQuery query, CyColumn column){
+	private URI getQueryURI(final String data, WebQuery query){
 		try {
-			boolean replaceWhiteSpaceWithOr = false;
-			
-			String data = _columnUtil.getColumnData(network, column, selectedNode);
-			
+			boolean replaceWhiteSpaceWithOr = false;			
 			String queryString = _columnUtil.getQueryString(data, query.isReplaceWhiteSpaceWithOr());
 			if (queryString == null){
 				_dialogUtil.showMessageDialog(_swingApplication.getJFrame(),
@@ -144,24 +141,27 @@ public class WebSearchTaskFactoryImpl extends AbstractNodeViewTaskFactory implem
 		}
                 boolean openWebBrowserRes = true;
 		CyNetwork network = networkView.getModel();
+                StringBuilder sb = new StringBuilder();
                 for (CyNode selectedNode : CyTableUtil.getSelectedNodes(network)){
-		
-                    for (WebQuery query : _webSearchDialog.getSelectedQueries()){
-                            URI queryURI = getQueryURI(network, selectedNode, 
-                                            query, _webSearchDialog.getSelectedColumn());
-                            if (queryURI == null){
-                                    continue;
-                            }
-                            openWebBrowserRes = runQueryOnWebBrowser(queryURI);
-                            if (openWebBrowserRes == false){
-                                break;
-                            }
-                    }
-                    if (openWebBrowserRes == false){
-                        break;
+                    String data = _columnUtil.getColumnData(network, _webSearchDialog.getSelectedColumn(), selectedNode);
+                    if (data != null && data.length() > 0){
+                        if (sb.length() > 0){
+                            sb.append(" ");
+                        }
+                        sb.append(data);
                     }
                 }
-		
+		String combinedData = sb.toString();
+                for (WebQuery query : _webSearchDialog.getSelectedQueries()){
+                        URI queryURI = getQueryURI(combinedData, query);
+                        if (queryURI == null){
+                                continue;
+                        }
+                        openWebBrowserRes = runQueryOnWebBrowser(queryURI);
+                        if (openWebBrowserRes == false){
+                            break;
+                        }
+                }
 		return new TaskIterator(new DoNothingTask());
 	}
 
@@ -191,7 +191,7 @@ public class WebSearchTaskFactoryImpl extends AbstractNodeViewTaskFactory implem
 	public boolean isReady(CyNetworkView networkView) {
 		if (networkView != null && networkView.getModel() != null) {
                         int numSelectedNodes = CyTableUtil.getSelectedNodes(networkView.getModel()).size();
-			if (numSelectedNodes > 1 && numSelectedNodes <=2) {
+			if (numSelectedNodes >= 1) {
 				return true;
 			}
 		}

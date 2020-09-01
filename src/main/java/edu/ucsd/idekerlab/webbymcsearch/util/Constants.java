@@ -8,7 +8,7 @@ public class Constants {
 	public static final String PROJECT_VERSION_PROP = "project.version";
 		
 	public static final String TOP_MENU = "Apps.Webby McSearch";
-	public static final String CONTEXT_MENU = "Apps.Webby McSearch";
+	public static final String CONTEXT_MENU = "Apps";
 
 	public final static String COLUMN_SUID = "SUID";
 	

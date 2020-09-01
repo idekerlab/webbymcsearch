@@ -69,7 +69,7 @@ public class CyActivator extends AbstractCyActivator {
 		Properties iQueryCMenuProps = new Properties();
 		iQueryCMenuProps.setProperty(PREFERRED_MENU, Constants.CONTEXT_MENU);
 		iQueryCMenuProps.setProperty(ENABLE_FOR, ENABLE_FOR_SELECTED_NODES);
-		iQueryCMenuProps.setProperty(TITLE, "Web Search");
+		iQueryCMenuProps.setProperty(TITLE, "Webby McSearch");
 		iQueryCMenuProps.put(IN_MENU_BAR, false);
 		iQueryCMenuProps.put(IN_CONTEXT_MENU, true);
 		WebSearchTaskFactoryImpl iQueryFac = new WebSearchTaskFactoryImpl(swingApplication, dialogUtil, webSearchDialog);

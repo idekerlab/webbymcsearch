@@ -11,16 +11,16 @@ public class WebQuery {
 	private String _guiVisibleName;
 	private String _urlAsString;
 	private String _columnName;
-	private boolean _replaceWhiteSpaceWithOr;
+	private String _replaceWhiteSpaceWith;
 
 	public WebQuery(final String name,final String guiVisibleName,
 			final String urlAsString,
-			final String columnName, boolean replaceWhiteSpaceWithOr){
+			final String columnName, final String replaceWhiteSpaceWith){
 		_name = name;
 		_guiVisibleName = guiVisibleName;
 		_urlAsString = urlAsString;
 		_columnName = columnName;
-		_replaceWhiteSpaceWithOr = replaceWhiteSpaceWithOr;
+		_replaceWhiteSpaceWith = replaceWhiteSpaceWith;
 		
 	}
 	
@@ -56,13 +56,11 @@ public class WebQuery {
 		this._columnName = columnName;
 	}
 
-	public boolean isReplaceWhiteSpaceWithOr() {
-		return _replaceWhiteSpaceWithOr;
+	public String getReplaceWhiteSpaceWith() {
+		return _replaceWhiteSpaceWith;
 	}
 
-	public void setReplaceWhiteSpaceWithOr(boolean replaceWhiteSpaceWithOr) {
-		this._replaceWhiteSpaceWithOr = replaceWhiteSpaceWithOr;
+	public void setReplaceWhiteSpaceWith(String replaceWhiteSpaceWith) {
+		this._replaceWhiteSpaceWith = replaceWhiteSpaceWith;
 	}
-	
-	
 }

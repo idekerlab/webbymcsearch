@@ -65,21 +65,21 @@ public class ColumnUtil {
 	 * @param networkView
 	 * @return 
 	 */
-	public String getQueryString(final String data, boolean replaceWhiteSpaceWithOr) throws UnsupportedEncodingException {
+	public String getQueryString(final String data, final String replaceWhiteSpaceWithDelimiter) throws UnsupportedEncodingException {
 		
 		if (data == null || data.trim().isEmpty()){
 			return null;
 		}
 		
 		String theQuery = data;
-		if (replaceWhiteSpaceWithOr == true){
-			theQuery = replaceWhiteSpaceWithOr(data);
+		if (replaceWhiteSpaceWithDelimiter != null){
+			theQuery = replaceWhiteSpaceWith(data, replaceWhiteSpaceWithDelimiter);
 		}
 		
 		return URLEncoder.encode(theQuery, StandardCharsets.UTF_8.toString());
 	}
 	
-	protected String replaceWhiteSpaceWithOr(final String data){
+	protected String replaceWhiteSpaceWith(final String data, final String delimiter){
 		StringBuilder sb = new StringBuilder();
 		boolean emptyBuilder = true;
 		for (String dataStrFrag : data.split("\\s+")){
@@ -88,7 +88,7 @@ public class ColumnUtil {
 				emptyBuilder = false;
 				continue;
 			}
-			sb.append(" OR ");
+			sb.append(delimiter);
 			sb.append(dataStrFrag);
 		}
 		return sb.toString();

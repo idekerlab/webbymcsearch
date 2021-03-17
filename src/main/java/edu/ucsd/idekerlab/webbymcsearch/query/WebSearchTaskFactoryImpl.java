@@ -70,7 +70,7 @@ public class WebSearchTaskFactoryImpl extends AbstractNodeViewTaskFactory implem
 	private URI getQueryURI(final String data, WebQuery query){
 		try {
 			boolean replaceWhiteSpaceWithOr = false;			
-			String queryString = _columnUtil.getQueryString(data, query.isReplaceWhiteSpaceWithOr());
+			String queryString = _columnUtil.getQueryString(data, query.getReplaceWhiteSpaceWith());
 			if (queryString == null){
 				_dialogUtil.showMessageDialog(_swingApplication.getJFrame(),
 						"No terms to query");

@@ -52,7 +52,7 @@ public class AddQueryColumnsTask extends AbstractTask {
 					continue;
 				}
 				String qStr = _columnUtil.getQueryString(rawValue,
-						selectedQuery.isReplaceWhiteSpaceWithOr());
+						selectedQuery.getReplaceWhiteSpaceWith());
 				if (qStr == null){
 					continue;
 				}

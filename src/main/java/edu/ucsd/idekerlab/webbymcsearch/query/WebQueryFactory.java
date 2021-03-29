@@ -26,7 +26,7 @@ public class WebQueryFactory {
                         "gProfiler Homo sapiens", 
                         "https://biit.cs.ut.ee/gprofiler/gost?organism=hsapiens&ordered=false&all_results=false&no_iea=false&combined=false&measure_underrepresentation=false&domain_scope=annotated&significance_threshold_method=g_SCS&user_threshold=0.05&numeric_namespace=ENTREZGENE_ACC&sources=GO:MF,GO:CC,GO:BP,KEGG,TF,REAC,MIRNA,HPA,CORUM,HP,WP&background=&query=",
                         "gProfiler Homo sapiens Search", null));
-		wqList.add(new WebQuery("MSigDB", "MSigDB Search", "https://www.gsea-msigdb.org/gsea/msigdb/annotate.jsp?geneIdList=", "MSigDB", ","));
+		wqList.add(new WebQuery("MSigDB", "MSigDB Search", "http://www.gsea-msigdb.org/gsea/analysisApi?speciesName=Human&username=ndex_user&op=annotate&geneIdList=", "MSigDB", ","));
 		return wqList;
 	}
 }

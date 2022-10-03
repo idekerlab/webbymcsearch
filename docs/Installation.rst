@@ -16,6 +16,6 @@ Install Webby McSearch
     * In the App Manager select **WebbyMcSearch** in the list of All Apps and click the Install button.
 
 
-| CyCommunityDetection can also be installed from the Cytoscape App Store at
-| http://apps.cytoscape.org/apps/webbymcsearch
+| Webby McSearch can also be installed from the Cytoscape App Store at
+| https://apps.cytoscape.org/apps/webbymcsearch
 |

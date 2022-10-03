@@ -21,24 +21,30 @@ be displayed by invoking the menu option **View -> Show Starter Panel**.
 Run a Web Search
 --------------------
 
-Using network/hierarchy generated above select a **single** node
+Using network loaded above select one or more nodes
 in the network view and then right click on a selected node to display the submenu
 and select **Apps -> Webby McSearch -> Web Search**
 as seen here:
 
-.. image:: images/quicktutorial/term_map_select_nodes.png
+.. image:: images/quicktutorial/selectnodes.png
    :class: with-border with-shadow
 
 The above step will display a dialog seen below:
 
-Select **gProfiler** from algorithm dropdown and click
-**Run** button.
+Select **[Gene Symbol] XXXX** from Choose data dropdown
 
-.. image:: images/quicktutorial/term_map_dialog.png
+.. image:: images/quicktutorial/selectnodecolumn.png
    :class: with-border with-shadow
 
-**gProfiler** will be run and nodes will be named and
-colored according to overlap as seen here:
+Review and check/uncheck websites to query and click the **Query** button
+to submit a query:
 
-.. image:: images/quicktutorial/mapped_terms.png
+.. image:: images/quicktutorial/selectsitestoquery.png
    :class: with-border with-shadow
+
+The query should be run on websites specified in new tabs a default web
+ browser
+
+.. image:: images/quicktutorial/browser_examples.png
+   :class: with-border with-shadow
+

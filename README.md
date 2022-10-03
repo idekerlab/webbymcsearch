@@ -3,25 +3,27 @@
 [git]: https://git-scm.com/
 [make]: https://www.gnu.org/software/make
 [cytoscape]: https://cytoscape.org/
-[directappinstall]: http://manual.cytoscape.org/en/stable/App_Manager.html#installing-apps
+[directcytoscapeinstall]: https://webbymcsearch.readthedocs.io/en/latest/Installation.html
 [appstore]: http://apps.cytoscape.org/apps/webbymcsearch
 
 Webby McSearch
 =======================================
 
 [![Build Status](https://travis-ci.com/idekerlab/webbymcsearch.svg?branch=master)](https://travis-ci.com/idekerlab/webbymcsearch) [![Coverage Status](https://coveralls.io/repos/github/idekerlab/webbymcsearch/badge.svg?branch=master)](https://coveralls.io/github/idekerlab/webbymcsearch?branch=master)
+[![Documentation Status](https://readthedocs.org/projects/webbymcsearch/badge/?version=latest)](https://webbymcsearch.readthedocs.io/en/latest/?badge=latest)
+
 
 
 Webby McSearch is a Cytoscape App that lets one
-perform web queries of a node attribute for a
-selected node on Google, PubMed, or other common
+perform web queries of a node attribute for 
+selected node(s) on Google, PubMed, or other common
 search engines.
 
 **NOTE:** This service is experimental. The interface is subject to change.
 
 **Publication**
 
-TODO ADD
+Coming soon...
 
 Requirements to use
 =====================
@@ -34,7 +36,8 @@ Requirements to use
 Installation via from Cytoscape
 ======================================
 
-TODO
+Webby McSearch is in the [Cytoscape App Store][appstore]
+and can be installed by following these [instructions][directcytoscapeinstall]
 
 Requirements to build (for developers)
 ========================================

@@ -21,7 +21,7 @@ import sphinx_rtd_theme
 # -- Project information -----------------------------------------------------
 
 project = 'Webby McSearch'
-copyright = '2020, Christopher Churas'
+copyright = '2022, Christopher Churas'
 author = 'Christopher Churas'
 
 # The version info for the project you're documenting, acts as replacement for

@@ -42,9 +42,35 @@ to submit a query:
 .. image:: images/quicktutorial/selectsitestoquery.png
    :class: with-border with-shadow
 
-The query should be run on websites specified in new tabs a default web
- browser
+The queries will be displayed in new tabs on your default web browser:
 
 .. image:: images/quicktutorial/browser_examples.png
    :class: with-border with-shadow
+
+
+Add Web Search Column(s)
+---------------------------
+
+Using network loaded above and displayed in the network view use the main
+menu to select
+
+**Apps -> Webby McSearch -> Add Web Search Column(s)**:
+
+.. image:: images/quicktutorial/add_websearch_cols_menu.png
+   :class: with-border with-shadow
+
+Select **[Gene Symbol] XXXX** from Choose data dropdown and unselect all
+sites except **iQuery Search** and click **Add Columns(s)**:
+
+.. image:: images/quicktutorial/selectquerycolumn.png
+   :class: with-border with-shadow
+
+Doing the above will add a new column named
+**WebbyMcSearch::(Gene Symbol) iQuery query** to the node table and fill the values
+with the webquery URL as seen here:
+
+.. image:: images/quicktutorial/new_column.png
+   :class: with-border with-shadow
+
+
 

@@ -29,7 +29,7 @@ public class WebSearchDialog extends JPanel {
 	
 	private final static String REMEMBER_TEXT = "Remember selections";
 	private final static String REMEMBER_TOOLTIP = "Not implemented";
-	private final static String REMEMBER_MESSAGE = "Remember selections has not been enabled";
+	private final static String REMEMBER_MESSAGE = "Remember selections has not been implemented";
 	
 	//private final static String REMEMBER_TOOLTIP = "If set, remembers selections";
 	//private final static String REMEMBER_MESSAGE = "If set, remembers selected column and <br/>"
@@ -237,8 +237,8 @@ public class WebSearchDialog extends JPanel {
 		rememberConstraints.insets = new Insets(0, 0, 0, 0);
 		_rememberCheckBox = new JCheckBox(REMEMBER_TEXT);
 		_rememberCheckBox.setName("rememberCheckBox");
-		_rememberCheckBox.setSelected(true);
-		_rememberCheckBox.setEnabled(true);
+		_rememberCheckBox.setSelected(false);
+		_rememberCheckBox.setEnabled(false);
 		_rememberCheckBox.setToolTipText(REMEMBER_TOOLTIP);
 		rPanel.add(_rememberCheckBox, rememberConstraints);
 		GridBagConstraints rememberIcon = new GridBagConstraints();

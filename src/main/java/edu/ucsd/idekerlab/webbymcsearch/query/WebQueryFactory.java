@@ -21,7 +21,7 @@ public class WebQueryFactory {
 		wqList.add(new WebQuery("iquery", "iQuery Search", "http://search.ndexbio.org/?genes=",
 		                               "iQuery", null));
                 wqList.add(new WebQuery("genecard", "GeneCards Search", "https://www.genecards.org/Search/Keyword?queryString=",
-		                               "GeneCards", null));
+		                               "GeneCards", " OR "));
                 wqList.add(new WebQuery("gprofilerhsapiens",
                         "gProfiler Homo sapiens", 
                         "https://biit.cs.ut.ee/gprofiler/gost?organism=hsapiens&ordered=false&all_results=false&no_iea=false&combined=false&measure_underrepresentation=false&domain_scope=annotated&significance_threshold_method=g_SCS&user_threshold=0.05&numeric_namespace=ENTREZGENE_ACC&sources=GO:MF,GO:CC,GO:BP,KEGG,TF,REAC,MIRNA,HPA,CORUM,HP,WP&background=&query=",

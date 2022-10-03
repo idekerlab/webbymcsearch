@@ -4,9 +4,13 @@ Webby McSearch
 ===============================================================================
 
 Webby McSearch is a Cytoscape App that lets one
-perform web queries of a node attribute for a
-selected node on Google, PubMed, or other common
+perform web queries of a node attribute for
+selected node(s) on Google, PubMed, or other common
 search engines.
+
+.. image:: images/f1_app_store.png
+   :class: with-border with-shadow
+
 
 Feature Requests and Reporting Bugs
 ------------------------------------
@@ -26,7 +30,7 @@ To Report a bug:
 Cite Webby McSearch
 ----------------------
 
-Manuscript in preparation
+Coming soon...
 
 .. toctree::
    :maxdepth: 2
@@ -42,8 +46,8 @@ Manuscript in preparation
    :caption: Links:
    :hidden:
 
-   Cytoscape.org <http://cytoscape.org>
-   Cytoscape App Store <http://apps.cytoscape.org/apps/webbymcsearch>
-   Idekerlab.ucsd.edu <http://idekerlab.ucsd.edu/>
+   Cytoscape.org <https://cytoscape.org>
+   Cytoscape App Store <https://apps.cytoscape.org/apps/webbymcsearch>
+   Idekerlab.ucsd.edu <https://idekerlab.ucsd.edu/>
    GitHub <https://github.com/idekerlab/webbymcsearch>
 

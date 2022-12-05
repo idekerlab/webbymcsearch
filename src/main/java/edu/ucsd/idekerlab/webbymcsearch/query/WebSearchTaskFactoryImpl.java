@@ -148,7 +148,10 @@ public class WebSearchTaskFactoryImpl extends AbstractNodeViewTaskFactory implem
                         if (sb.length() > 0){
                             sb.append(" ");
                         }
-                        sb.append(data);
+						// quick and dirty fix to replace commas and vertical bars with spaces
+						// in column values. Handles case where a column has a comma or vertical
+						// bar delimited list of genes
+                        sb.append(data.replace(",", " ").replace("|", " "));
                     }
                 }
 		String combinedData = sb.toString();

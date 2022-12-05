@@ -54,7 +54,6 @@ public class WebSearchDialog extends JPanel {
 	
 	private boolean _guiLoaded;
 	private HashMap<JCheckBox, WebQuery> _checkBoxes;
-	private JCheckBox _rememberCheckBox;
 	
 	private JComboBox _comboBox;
 	private HashMap<String, CyColumn> _columns;
@@ -93,10 +92,7 @@ public class WebSearchDialog extends JPanel {
 	* @return value of checkbox or {@code false} if checkbox is null
 	*/
 	public boolean rememberChoice(){
-		if (_rememberCheckBox == null){
-			return false;
-		}
-		return _rememberCheckBox.isSelected();
+		return true;
 	}
 	
 	public Set<WebQuery> getSelectedQueries(){
@@ -117,17 +113,19 @@ public class WebSearchDialog extends JPanel {
 		
 		// if remember is disabled check all the boxes which
 		// is default behavior
+		/*
 		if (_rememberCheckBox.isSelected() == false){
 			for (JCheckBox checkBox : this._checkBoxes.keySet()){
 				checkBox.setSelected(true);
 			}
 		}
+		*/
 		_comboBox.removeAllItems();
 		_columns = columns;
 		for (String col : columns.keySet()){
 			_comboBox.addItem(col);
 		
-			if (_rememberCheckBox.isSelected() && _lastSelectedColumn != null){
+			if (_lastSelectedColumn != null){
 				if (col.startsWith(_lastSelectedColumn)){
 					_comboBox.setSelectedItem(col);
 				}
@@ -159,7 +157,7 @@ public class WebSearchDialog extends JPanel {
 		rememberConstraints.anchor = GridBagConstraints.LINE_END;
 		rememberConstraints.insets = new Insets(0, 0, 0, 0);
 		
-		basePanel.add(getRememberSelectionPanel(), rememberConstraints);
+		//basePanel.add(getRememberSelectionPanel(), rememberConstraints);
 		
 		return basePanel;
 	}
@@ -225,44 +223,6 @@ public class WebSearchDialog extends JPanel {
 		chooserPanel.add(this.getComboInfoIcon(), comboIcon);
 
 		return chooserPanel;
-	}
-	
-	private JPanel getRememberSelectionPanel(){
-		JPanel rPanel = new JPanel();
-		rPanel.setLayout(new GridBagLayout());
-		GridBagConstraints rememberConstraints = new GridBagConstraints();
-		rememberConstraints.gridy = 0;
-		rememberConstraints.gridx = 0;
-		rememberConstraints.anchor = GridBagConstraints.LINE_END;
-		rememberConstraints.insets = new Insets(0, 0, 0, 0);
-		_rememberCheckBox = new JCheckBox(REMEMBER_TEXT);
-		_rememberCheckBox.setName("rememberCheckBox");
-		_rememberCheckBox.setSelected(false);
-		_rememberCheckBox.setEnabled(false);
-		_rememberCheckBox.setToolTipText(REMEMBER_TOOLTIP);
-		rPanel.add(_rememberCheckBox, rememberConstraints);
-		GridBagConstraints rememberIcon = new GridBagConstraints();
-		rememberIcon.gridy = 0;
-		rememberIcon.gridx = 1;
-		rememberIcon.anchor = GridBagConstraints.LINE_START;
-		rememberIcon.insets = new Insets(0, 0, 0, 5);
-		rPanel.add(getRememberInfoIcon(), rememberIcon);
-		return rPanel;
-	}
-	
-	/**
-	* Gets Chooser dropdown info icon
-	* @return 
-	*/
-	private JLabel getRememberInfoIcon(){
-		JLabel iconLabel = _iconFactory.getJLabelIcon(this,"info_icon", "png",
-					WebSearchDialog.REMEMBER_TEXT + " checkbox", 
-					REMEMBER_MESSAGE, 20, 40);
-		iconLabel.setName("rememberIcon");
-		iconLabel.setEnabled(true);
-		iconLabel.setToolTipText("Click here for more information about " +
-					WebSearchDialog.REMEMBER_TEXT);
-		return iconLabel;
 	}
 	
 	/**

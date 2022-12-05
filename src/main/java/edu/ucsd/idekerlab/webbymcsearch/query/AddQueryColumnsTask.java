@@ -51,7 +51,8 @@ public class AddQueryColumnsTask extends AbstractTask {
 				if (rawValue == null){
 					continue;
 				}
-				String qStr = _columnUtil.getQueryString(rawValue,
+				//replace vertical bar and commas with space in raw value
+				String qStr = _columnUtil.getQueryString(rawValue.replace(",", " ").replace("|", " "),
 						selectedQuery.getReplaceWhiteSpaceWith());
 				if (qStr == null){
 					continue;
